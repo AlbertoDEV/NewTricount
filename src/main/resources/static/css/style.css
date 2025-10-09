@@ -1,0 +1,247 @@
+/* Google's Material Design Color Palette */
+:root {
+    --google-blue: #4285F4;
+    --google-red: #DB4437;
+    --google-yellow: #F4B400;
+    --google-green: #0F9D58;
+    --primary-text: #212121;
+    --secondary-text: #757575;
+    --background-light: #f5f5f5;
+    --background-white: #ffffff;
+    --divider-color: #e0e0e0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: var(--background-light);
+    color: var(--primary-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: var(--background-white);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+h1, h2, h3 {
+    color: var(--google-blue);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+th, td {
+    border: 1px solid var(--divider-color);
+    text-align: left;
+    padding: 12px;
+}
+
+th {
+    background-color: var(--google-blue);
+    color: var(--background-white);
+}
+
+tr:nth-child(even) {
+    background-color: var(--background-light);
+}
+
+form div {
+    margin-bottom: 1.5em;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    color: var(--secondary-text);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--divider-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button, a.button {
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--google-blue);
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+    text-align: center;
+}
+
+button:hover, a.button:hover {
+    opacity: 0.9;
+}
+
+a {
+    color: var(--google-blue);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--divider-color);
+    margin: 2em 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    width: 100%;
+    background-color: var(--google-blue);
+    padding: 1em 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-brand:hover {
+    text-decoration: none;
+}
+
+.navbar-menu-container {
+    position: relative;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 2px 0;
+    background-color: white;
+    transition: 0.4s;
+}
+
+.language-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 10px;
+    background-color: white;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.language-menu.show {
+    display: block;
+}
+
+.language-menu a {
+    color: var(--primary-text);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.language-menu a:hover {
+    background-color: var(--background-light);
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 1em;
+        border-radius: 0;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    button, a.button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid var(--divider-color);
+        margin-bottom: 1em;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid var(--divider-color);
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+    td:before {
+        content: attr(data-th);
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: var(--primary-text);
+    }
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{header :: header}">
+    <title th:text="${group.name}">Group Details</title>
+</head>
+<body>
+    <div th:replace="~{navbar :: navbar}"></div>
+    <div class="container">
+        <h1 th:text="${group.name}">Group Name</h1>
+        <p th:text="${group.description}">Group Description</p>
+        <p><strong th:text="#{groupdetails.admin}">Admin</strong>: <span th:text="${group.admin.username}">Admin</span></p>
+
+        <h2 class="mt-4" th:text="#{groupdetails.members}">Members</h2>
+        <ul class="list-group mb-3">
+            <li class="list-group-item" th:each="member : ${group.members}" th:text="${member.user.username}">
+                Member
+            </li>
+        </ul>
+
+        <div th:if="${group.admin.id == user.id}" class="mt-4">
+            <h3 th:text="#{groupdetails.add.member}">Add Member</h3>
+            <form th:action="@{/groups/{id}/add-member(id=${group.id})}" method="post" class="form-inline">
+                <input type="text" name="username" class="form-control mr-2" th:placeholder="#{register.username}" required>
+                <button type="submit" class="btn btn-primary" th:text="#{groupdetails.add.button}">Add</button>
+            </form>
+        </div>
+
+        <hr class="my-4">
+
+        <h3 th:text="#{groupdetails.add.expense}">Add Expense</h3>
+        <form th:action="@{/groups/{id}/add-expense(id=${group.id})}" method="post" class="mt-3">
+            <div>
+                <label for="description" th:text="#{groupdetails.expense.description}">Description:</label>
+                <input type="text" id="description" name="description" required>
+            </div>
+            <div>
+                <label for="amount" th:text="#{groupdetails.expense.amount}">Amount:</label>
+                <input type="number" step="0.01" id="amount" name="amount" required>
+            </div>
+            <button type="submit" th:text="#{groupdetails.add.expense}">Add Expense</button>
+        </form>
+
+        <hr class="my-4">
+
+        <h2 class="mt-4" th:text="#{groupdetails.expenses.title}">Expenses</h2>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th th:text="#{groupdetails.expenses.date}">Date</th>
+                    <th th:text="#{groupdetails.expense.description}">Description</th>
+                    <th th:text="#{groupdetails.expenses.paidby}">Paid by</th>
+                    <th th:text="#{groupdetails.expense.amount}">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="expense : ${expenses}">
+                    <td th:attr="data-th=#{groupdetails.expenses.date}" th:text="${#temporals.format(expense.date, 'yyyy-MM-dd HH:mm')}">Date</td>
+                    <td th:attr="data-th=#{groupdetails.expense.description}" th:text="${expense.description}">Description</td>
+                    <td th:attr="data-th=#{groupdetails.expenses.paidby}" th:text="${expense.paidBy.username}">Paid by</td>
+                    <td th:attr="data-th=#{groupdetails.expense.amount}" th:text="${expense.amount}">Amount</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr class="my-4">
+
+        <h2 class="mt-4" th:text="#{groupdetails.debts.title}">Debts</h2>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th th:text="#{groupdetails.debts.debtor}">Debtor</th>
+                    <th th:text="#{groupdetails.debts.creditor}">Creditor</th>
+                    <th th:text="#{groupdetails.debts.amount}">Amount</th>
+                    <th th:text="#{groupdetails.debts.status}">Status</th>
+                    <th th:text="#{groupdetails.debts.action}">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="debt : ${debts}">
+                    <td th:attr="data-th=#{groupdetails.debts.debtor}" th:text="${debt.debtor.username}">Debtor</td>
+                    <td th:attr="data-th=#{groupdetails.debts.creditor}" th:text="${debt.creditor.username}">Creditor</td>
+                    <td th:attr="data-th=#{groupdetails.debts.amount}" th:text="${debt.amount}">Amount</td>
+                    <td th:attr="data-th=#{groupdetails.debts.status}" th:text="${debt.settled} ? #{groupdetails.debts.status.settled} : (#{groupdetails.debts.status.pending} + (${debt.paidNotificationSent} ? ' (' + #{groupdetails.debts.status.pending.confirmation} + ')' : ''))">Status</td>
+                    <td th:attr="data-th=#{groupdetails.debts.action}">
+                        <form th:if="${!debt.settled and debt.debtor.id == user.id and !debt.paidNotificationSent}" th:action="@{/debts/{id}/notify(id=${debt.id})}" method="post">
+                            <button type="submit" th:text="#{groupdetails.action.notify}">I have paid</button>
+                        </form>
+                        <form th:if="${!debt.settled and (debt.creditor.id == user.id or group.admin.id == user.id) and debt.paidNotificationSent}" th:action="@{/debts/{id}/confirm(id=${debt.id})}" method="post">
+                            <button type="submit" th:text="#{groupdetails.action.confirm}">Confirm Payment</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/dashboard}" class="btn btn-secondary mt-4" th:text="#{dashboard.back}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

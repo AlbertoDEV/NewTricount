@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{header :: header}">
+    <title th:text="#{app.title}">Dashboard</title>
+</head>
+<body>
+    <div th:replace="~{navbar :: navbar}"></div>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 th:with="username=${user.username}" th:text="#{dashboard.welcome(username)}">Welcome, User!</h1>
+            <a th:href="@{/logout}" class="btn btn-secondary" th:text="#{dashboard.logout}">Logout</a>
+        </div>
+
+        <h2 class="mt-5" th:text="#{dashboard.groups.title}">Your Groups</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item" th:each="group : ${groups}">
+                <a th:href="@{/groups/{id}(id=${group.id})}" th:text="${group.name}">Group Name</a>
+            </li>
+        </ul>
+
+        <a th:href="@{/groups/new}" class="btn btn-primary" th:text="#{dashboard.groups.new}">Create New Group</a>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav class="navbar" th:fragment="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/dashboard}" class="navbar-brand" th:text="#{app.title}">Gastos</a>
+            <div class="navbar-menu-container">
+                <button id="menu-toggle" class="menu-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+                <div id="language-menu" class="language-menu">
+                    <a th:href="@{''(lang=en)}" th:text="#{lang.en}"></a>
+                    <a th:href="@{''(lang=es)}" th:text="#{lang.es}"></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
