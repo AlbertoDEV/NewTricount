@@ -1,6 +1,9 @@
 package com.example.gastos.service;
 
 import com.example.gastos.model.Debt;
+import com.example.gastos.model.Debt;
+
+import java.util.Optional;
 import com.example.gastos.repository.DebtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,10 @@ public class DebtService {
 
     @Autowired
     private DebtRepository debtRepository;
+
+    public Optional<Debt> findById(Long id) {
+        return debtRepository.findById(id);
+    }
 
     public void sendPaidNotification(Long debtId) {
         Debt debt = debtRepository.findById(debtId)
