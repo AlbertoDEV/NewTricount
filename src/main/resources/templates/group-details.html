@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{header :: header}">
     <title th:text="${group.name}">Group Details</title>
 </head>
@@ -11,16 +11,16 @@
         <p><strong th:text="#{groupdetails.admin}">Admin</strong>: <span th:text="${group.admin.username}">Admin</span></p>
 
         <h2 class="mt-4" th:text="#{groupdetails.members}">Members</h2>
-        <ul class="list-group mb-3">
-            <li class="list-group-item" th:each="member : ${group.members}" th:text="${member.user.username}">
-                Member
+        <ul class="group-grid">
+            <li class="group-card" th:each="member : ${group.members}">
+                <span th:text="${member.user.username}">Member</span>
             </li>
         </ul>
 
         <div th:if="${group.admin.id == user.id}" class="mt-4">
             <h3 th:text="#{groupdetails.add.member}">Add Member</h3>
             <form th:action="@{/groups/{id}/add-member(id=${group.id})}" method="post" class="form-inline">
-                <input type="text" name="username" class="form-control mr-2" th:placeholder="#{register.username}" required>
+                <input type="text" name="username" class="form-control mr-4" th:placeholder="#{register.username}" required>
                 <button type="submit" class="btn btn-primary" th:text="#{groupdetails.add.button}">Add</button>
             </form>
         </div>

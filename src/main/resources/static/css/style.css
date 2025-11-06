@@ -31,6 +31,14 @@ body {
     border-radius: 8px;
 }
 
+.card {
+    background-color: var(--background-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.5em;
+    margin-bottom: 1.5em;
+}
+
 h1, h2, h3 {
     color: var(--google-blue);
 }
@@ -77,6 +85,16 @@ textarea {
     border: 1px solid var(--divider-color);
     border-radius: 4px;
     box-sizing: border-box;
+    transition: border-color 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--google-blue);
 }
 
 button, a.button {
@@ -90,10 +108,13 @@ button, a.button {
     display: inline-block;
     font-size: 1em;
     text-align: center;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 button:hover, a.button:hover {
-    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 a {

@@ -3,9 +3,13 @@ package com.example.gastos.controller;
 import com.example.gastos.model.Debt;
 import com.example.gastos.model.Expense;
 import com.example.gastos.model.Group;
+import com.example.gastos.model.Debt;
+import com.example.gastos.model.Expense;
+import com.example.gastos.model.Group;
 import com.example.gastos.model.User;
 import com.example.gastos.service.ExpenseService;
 import com.example.gastos.service.GroupService;
+import com.example.gastos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -27,12 +31,12 @@ public class GroupController {
     @Autowired
     private ExpenseService expenseService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
+    public String dashboard(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new IllegalArgumentException("User not found"));
         List<Group> groups = groupService.findGroupsByUser(user);
         model.addAttribute("groups", groups);
         model.addAttribute("user", user);
@@ -45,21 +49,15 @@ public class GroupController {
     }
 
     @PostMapping("/groups/new")
-    public String createGroup(@RequestParam String name, @RequestParam String description, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
+    public String createGroup(@RequestParam String name, @RequestParam String description, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new IllegalArgumentException("User not found"));
         groupService.createGroup(name, description, user);
         return "redirect:/dashboard";
     }
 
     @GetMapping("/groups/{id}")
-    public String groupDetails(@PathVariable Long id, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
+    public String groupDetails(@PathVariable Long id, Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new IllegalArgumentException("User not found"));
         Group group = groupService.findGroupById(id);
         List<Expense> expenses = expenseService.findExpensesByGroup(group);
         List<Debt> debts = expenseService.findDebtsByGroup(group);
@@ -72,11 +70,8 @@ public class GroupController {
     }
 
     @PostMapping("/groups/{id}/add-member")
-    public String addMember(@PathVariable Long id, @RequestParam String username, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
+    public String addMember(@PathVariable Long id, @RequestParam String username, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new IllegalArgumentException("User not found"));
         Group group = groupService.findGroupById(id);
         // For simplicity, only the admin can add members
         if (group.getAdmin().getId().equals(user.getId())) {
@@ -86,11 +81,8 @@ public class GroupController {
     }
 
     @PostMapping("/groups/{id}/add-expense")
-    public String addExpense(@PathVariable Long id, @RequestParam String description, @RequestParam BigDecimal amount, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
+    public String addExpense(@PathVariable Long id, @RequestParam String description, @RequestParam BigDecimal amount, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new IllegalArgumentException("User not found"));
         Group group = groupService.findGroupById(id);
         expenseService.addExpense(group, user, description, amount);
         return "redirect:/groups/" + id;

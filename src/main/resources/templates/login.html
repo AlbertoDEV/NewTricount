@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{header :: header}">
     <title th:text="#{login.title}">Login</title>
 </head>
@@ -8,6 +8,7 @@
     <div class="container mt-4">
         <h1 class="mb-4" th:text="#{login.title}">Login</h1>
         <form th:action="@{/login}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="form-group mb-3">
                 <label for="username" th:text="#{login.username}">Username:</label>
                 <input type="text" id="username" name="username" class="form-control" required>
@@ -23,7 +24,7 @@
         <p th:if="${error}" th:text="#{login.error}" class="text-danger mt-3"></p>
         <p class="mt-3">
             <span th:text="#{login.register.prompt}">Don't have an account?</span>
-            <a th:href="@{/register}" class="btn btn-secondary btn-sm" th:text="#{login.register.action}">Register here</a>
+            <a th:href="@{/register}" class="link-secondary" th:text="#{login.register.action}">Register here</a>
         </p>
     </div>
 </body>

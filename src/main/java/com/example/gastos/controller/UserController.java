@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -18,8 +18,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/")
-    public String home(HttpSession session) {
-        if (session.getAttribute("user") != null) {
+    public String home(Principal principal) {
+        if (principal != null) {
             return "redirect:/dashboard";
         }
         return "redirect:/login";
@@ -44,23 +44,5 @@ public class UserController {
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
-    }
-
-    @PostMapping("/login")
-    public String loginUser(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
-        User user = userService.login(username, password);
-        if (user != null) {
-            session.setAttribute("user", user);
-            return "redirect:/dashboard";
-        } else {
-            model.addAttribute("error", "Invalid username or password");
-            return "login";
-        }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
     }
 }
